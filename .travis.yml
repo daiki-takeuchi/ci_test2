@@ -28,4 +28,4 @@ script:
 
 after_script:
   - php vendor/bin/coveralls.php -v -c .coveralls.yml
-  - CODECLIMATE_REPO_TOKEN=80af656787709120af3061efd38afbc20590d94f0e13538a68a102b57727b510 ./vendor/bin/test-reporter --stdout > codeclimate.json
+  - CODECLIMATE_REPO_TOKEN=80af656787709120af3061efd38afbc20590d94f0e13538a68a102b57727b510 vendor/bin/test-reporter --stdout > codeclimate.json
