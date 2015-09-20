@@ -1,32 +1,35 @@
 language: php
-
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-
+- 5.4
+- 5.5
+- 5.6
 before_install:
-  - composer self-update
-
+- composer self-update
 env:
-  - DB=pgsql
-
+- DB=pgsql
 before_script:
-  - composer install --dev
-  - psql postgres -c "CREATE ROLE root WITH LOGIN PASSWORD 'P@ssw0rd';"
-  - psql postgres -c 'DROP DATABASE IF EXISTS tutorial;'
-  - psql postgres -c 'CREATE DATABASE tutorial owner root;'
-  - psql postgres -c 'DROP DATABASE IF EXISTS tutorial_test;'
-  - psql postgres -c 'CREATE DATABASE tutorial_test owner root;'
-  - php cli migrate
-
+- composer install --dev
+- psql postgres -c "CREATE ROLE root WITH LOGIN PASSWORD 'P@ssw0rd';"
+- psql postgres -c 'DROP DATABASE IF EXISTS tutorial;'
+- psql postgres -c 'CREATE DATABASE tutorial owner root;'
+- psql postgres -c 'DROP DATABASE IF EXISTS tutorial_test;'
+- psql postgres -c 'CREATE DATABASE tutorial_test owner root;'
+- php cli migrate
 script:
-  - mkdir -p build/logs
-  - cd application/tests
-  - ../../vendor/bin/phpunit --coverage-clover ../build/logs/clover.xml
-  - cd ../../
-
+- mkdir -p build/logs
+- cd application/tests
+- "../../vendor/bin/phpunit --coverage-clover ../build/logs/clover.xml"
+- cd ../../
 after_script:
-  - php vendor/bin/coveralls -v -c .coveralls.yml
-  - CODECLIMATE_REPO_TOKEN=80af656787709120af3061efd38afbc20590d94f0e13538a68a102b57727b510 vendor/bin/test-reporter --stdout > codeclimate.json
-  - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
+- php vendor/bin/coveralls -v -c .coveralls.yml
+- CODECLIMATE_REPO_TOKEN=80af656787709120af3061efd38afbc20590d94f0e13538a68a102b57727b510
+  vendor/bin/test-reporter --stdout > codeclimate.json
+- 'curl -X POST -d @codeclimate.json -H ''Content-Type: application/json'' -H ''User-Agent:
+  Code Climate (PHP Test Reporter v0.1.1)'' https://codeclimate.com/test_reports'
+deploy:
+  provider: heroku
+  api_key:
+    secure: pU0BBRonqyKmxEQbcn94gCHXBGD6AWHdV1I8WZytq7SbGbhQm97rMbSNqkYlPnDC9iRBhMjODcAFOvHEGFJyCVvJjDPuo05F40NfZp6mZnDjkaIZft2Avd2DwL4bkeolY+1DQeoIkW+H2AX6TnptvAlYmljuzkG4eu7m+zw9h7BYdfkX9wrSRx0JykKyXUj1krXDpgnYJcvkdQ7JRCzU7KWvVW/wLAMxRsTM/q4eVkXxa5vMQh7mQ/p6DNZkgyNxEC/8LjxQDcNRRU2hT0QrcooS1TYwfz646/2PDRdxZbU2X5plCMhBZky2yHozB82iePKROojzYlvsKcHM2gG8GWBPtT5qOcVdV8GAVxDscxgYBUjhfLs8FLc48CjpIbGFKP77XhU43gqEnN6IF/m5ZZN/AkWCnNMjqWyaospYUHYnqP9qU3iu/F00Ri4monOjMcHeciYddX4vgUbRJXpm0wdTCt2sE7JhepdmpRRVyX0Vy50GuvYeDkP6n1+zskpVcLSOR4ky7ACIJmuQlahuNW+e0y7WYzIgFFL+RTLpOf25efHPNOja0Qt+CIZFaWjK37XEXLV5+ioYzTn0R+0dUMnRj0269o0zM7tCVhODOVo0N7Md09xzYyP8u1AFaQfhu4NfYzEo7M+4f0v9IuIpJNgkDlC+/D7mts56WlrbKb0=
+  app: frozen-depths-7969
+  on:
+    repo: daiki-takeuchi/ci_test2
