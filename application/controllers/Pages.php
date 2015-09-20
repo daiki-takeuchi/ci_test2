@@ -17,7 +17,7 @@ class Pages extends CI_Controller
             // Whoops, we don't have a page for that!
             show_404();
         }
-        var_dump($_SERVER);
+        echo date('Y-m-d H:i:s');
         var_dump(ENVIRONMENT);
         $this->smarty->display('pages/' . $page . '.tpl');
     }
